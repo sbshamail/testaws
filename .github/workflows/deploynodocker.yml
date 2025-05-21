@@ -41,7 +41,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            export PATH=$HOME/.nvm/versions/node/v22.*/bin:$PATH
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm use 22
             cd next-app
             npm install --legacy-peer-deps --production
             pm2 start npm --name "next-app" -- start || pm2 restart "next-app"
