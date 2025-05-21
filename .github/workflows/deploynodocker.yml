@@ -31,7 +31,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: ".next,package.json,public"
+          source: ".next,package.json,package-lock.json,public,ecosystem.config.js"
           target: "/home/ubuntu/next-app"
 
       - name: SSH and restart app with PM2
@@ -47,5 +47,4 @@ jobs:
             nvm use 22
             cd next-app
             npm install --legacy-peer-deps --production
-            pm2 restart "next-app"
-          # pm2 start npm --name "next-app" -- start
+            pm2 describe next-app > /dev/null 2>&1 && pm2 restart next-app || pm2 start npm --name "next-app" -- start
