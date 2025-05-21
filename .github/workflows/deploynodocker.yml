@@ -47,4 +47,5 @@ jobs:
             nvm use 22
             cd next-app
             npm install --legacy-peer-deps --production
-            pm2 start npm --name "next-app" -- start || pm2 restart "next-app"
+            pm2 restart "next-app"
+          # pm2 start npm --name "next-app" -- start
