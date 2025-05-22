@@ -127,7 +127,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: ".next,package.json,package-lock.json,public,ecosystem.config.js"
+          source: "./"
           target: "/home/ubuntu/actions-runner/_work/testaws/testaws"
 
       - name: SSH and restart app with PM2
