@@ -1,35 +1,50 @@
-# name: Build & Deploy via Docker (Self-hosted)
+name: Deploy to EC2 (no Docker)
 
-# on:
-#   push:
-#     branches: [main]
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   deploy:
-#     runs-on: self-hosted
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repo
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Set up Docker
-#         uses: docker/setup-buildx-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-#       - name: Build Docker image
-#         run: |
-#           docker build \
-#             --build-arg SITE_URL=${{ secrets.SITE_URL }} \
-#             -t nextjs-app:latest .
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-#       - name: Stop existing container (if any)
-#         run: |
-#           docker stop nextjs-app || true
-#           docker rm nextjs-app || true
+      - name: Build the app
+        run: npm run build
 
-#       - name: Run new container
-#         run: |
-#           docker run -d \
-#             --name nextjs-app \
-#             -p 3000:3000 \
-#             -e SITE_URL=${{ secrets.SITE_URL }} \
-#             nextjs-app:latest
+      - name: Deploy files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: ".next,package.json,package-lock.json,public,ecosystem.config.js"
+          target: "/home/ubuntu/actions-runner/_work/testaws/testaws"
+
+      - name: SSH and restart app with PM2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm use 22
+            cd ~/actions-runner/_work/testaws/testaws
+            npm install --legacy-peer-deps --production
+            pm2 describe next-app > /dev/null 2>&1 && pm2 restart next-app || pm2 start ecosystem.config.js

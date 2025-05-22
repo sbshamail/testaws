@@ -1,0 +1,43 @@
+.apexcharts {
+  color: hsla(var(--card-foreground)); /* White text globally */
+}
+
+.apexcharts-text {
+  fill: hsla(var(--card-foreground)); /* Changes axis labels, data labels */
+}
+
+.apexcharts-xaxis text,
+.apexcharts-yaxis text {
+  fill: hsla(var(--card-foreground)); /* X & Y axis labels */
+}
+
+.apexcharts-title-text,
+.apexcharts-legend-text {
+  fill: hsla(var(--card-foreground)); /* Chart title & legend text */
+}
+
+.apexcharts-tooltip {
+  background-color: hsla(var(--card)); /* Dark background */
+  color: hsla(var(--card-foreground)); /* White text */
+}
+
+.apexcharts-tooltip text {
+  fill: hsla(var(--card-foreground));
+}
+.apexcharts-legend-text {
+  fill: hsla(var(--card-foreground)); /* Legend text */
+}
+
+.apexcharts-menu {
+  background-color: hsla(var(--card)); /* Menu background */
+  color: hsla(var(--card-foreground)); /* Menu text */
+  border: 1px solid hsla(var(--secondary));
+}
+
+.apexcharts-menu-item {
+  color: hsla(var(--card-foreground));
+}
+
+.apexcharts-menu-item:hover {
+  background-color: hsla(var(--background));
+}

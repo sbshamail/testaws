@@ -1,11 +1,14 @@
-import React from "react";
+import { redirect } from "next/navigation";
+import { getCookie } from "@/action/cookieAction";
 
-const page = () => {
-  return (
-    <div className="bg-black h-screen w-full flex items-center justify-center text-white">
-      This is my site
-    </div>
-  );
-};
+export default async function Home() {
+  const auth = await getCookie("auth", true);
+  if (auth?.pcp_user_id) {
+    redirect("/dashboard");
+  } else {
+    redirect("/customer");
+  }
+  // Redirect to /dashboard on the server side
 
-export default page;
+  return <h1>Redirecting...</h1>;
+}

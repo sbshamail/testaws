@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 120 40">
+  <!-- Rounded rectangle for the button -->
+  <rect x="1" y="1" width="118" height="34" rx="12" ry="12" fill="none" stroke="black" strokeWidth="2" />
+  <!-- Centered text -->
+  <text x="50%" y="50%" fill="black" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle">
+    DECODE
+  </text>
+</svg>
