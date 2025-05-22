@@ -1,5 +1,7 @@
 # Next.js App Deployment to EC2 — Full Setup Guide (No Docker)
 
+## SWAP is required
+
 ---
 
 ```bash
@@ -152,3 +154,52 @@ pm2 logs next-app
 pm2 list
 pm2 save
 pm2 startup
+
+## Swap is required
+
+# 🧠 Add Swap Memory on Ubuntu (EC2-friendly)
+
+If your EC2 instance has low RAM (e.g., 1 GB or less), it's often helpful to create swap memory to prevent out-of-memory issues during builds or `npm install`.
+
+---
+
+## 📌 Check Current Swap Status
+
+````bash
+free -h
+
+## Step-by-Step Swap Creation
+```bash
+sudo fallocate -l 512M /swapfile  #1g for 1gb
+````
+
+If fallocate fails, use:
+
+```bash
+sudo dd if=/dev/zero of=/swapfile bs=1M count=512
+```
+
+```bash
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+free -h  #verify
+```
+
+Make Swap Permanent
+
+```bash
+sudo nano /etc/fstab
+/swapfile none swap sw 0 0
+
+```
+
+(Optional) To Remove Swap
+
+```bash
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo nano /etc/fstab
+# Remove the line for /swapfile
+
+```
