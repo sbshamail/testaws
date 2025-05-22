@@ -154,6 +154,7 @@ pm2 logs next-app
 pm2 list
 pm2 save
 pm2 startup
+pm2 update
 
 ## Swap is required
 
